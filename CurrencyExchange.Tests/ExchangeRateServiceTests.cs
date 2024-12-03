@@ -16,7 +16,6 @@ public class ExchangeRateServiceTests
     {
         // Arrange
         var exchangeRateProviderMock = new Mock<IExchangeRateProvider>();
-        var loggerMock = new Mock<ILogger<ExchangeRateService>>();
         var exchangeRate = new ExchangeRate
         {
             Base = baseCurrency,
@@ -44,7 +43,6 @@ public class ExchangeRateServiceTests
     {
         // Arrange
         var exchangeRateProviderMock = new Mock<IExchangeRateProvider>();
-        var loggerMock = new Mock<ILogger<ExchangeRateService>>();
         var currencies = new List<Currency>
         {
             new Currency { Code = "USD", Name = "United States Dollar", DecimalDigits = 2, Symbol = "$" },

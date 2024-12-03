@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CurrencyExchange.Core.Models.Response
+﻿namespace CurrencyExchange.Core.Models.Response
 {
     public record CurrencyDto
     {

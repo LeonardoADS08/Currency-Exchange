@@ -1,7 +1,6 @@
 using CurrencyExchange.Core.Models;
 using CurrencyExchange.Core.Providers.Interfaces;
 using CurrencyExchange.Core.Services;
-using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace CurrencyExchange.Tests;

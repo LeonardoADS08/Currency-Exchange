@@ -55,7 +55,6 @@ internal class CacheExchangeRateProvider : IExchangeRateProvider
 
     private string GetExchangeRateCacheKey(string baseCurrency, string[] targetCurrencies)
     {
-        // assuming 180 currencies, combinations possible = P(180,2) = 32200 max cache keys
         var targetCurrenciesString = string.Join(",", targetCurrencies);
         return $"{baseCurrency}:{targetCurrenciesString}";
     }

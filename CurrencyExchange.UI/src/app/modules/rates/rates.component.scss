@@ -1,0 +1,52 @@
+:host ::ng-deep {
+  // Custom dropdown styling
+  .custom-dropdown .p-dropdown {
+    @apply border border-gray-300 rounded-lg;
+
+    &:hover {
+      @apply border-primary-500;
+    }
+
+    &.p-focus {
+      @apply border-primary-500 ring-2 ring-primary-100;
+    }
+  }
+
+  // Custom multiselect styling
+  .custom-multiselect .p-multiselect {
+    @apply border border-gray-300 rounded-lg;
+
+    &:hover {
+      @apply border-primary-500;
+    }
+
+    &.p-focus {
+      @apply border-primary-500 ring-2 ring-primary-100;
+    }
+  }
+
+  // Table styling
+  .p-datatable {
+    .p-datatable-thead > tr > th {
+      @apply bg-gray-50 text-gray-700 px-6 py-4;
+    }
+
+    .p-datatable-tbody > tr > td {
+      @apply px-6 py-4;
+    }
+
+    &.p-datatable-hoverable-rows .p-datatable-tbody > tr:not(.p-highlight):hover {
+      @apply bg-gray-50;
+    }
+  }
+}
+
+// Animation
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}

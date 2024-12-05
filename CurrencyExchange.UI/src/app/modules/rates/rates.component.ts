@@ -1,75 +1,57 @@
-import { Component, computed, effect, inject, signal, untracked } from '@angular/core';
+import { Component, inject, DestroyRef } from '@angular/core';
 import { RatesStore } from './rates.store';
-import { DropdownModule } from 'primeng/dropdown';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { TableModule } from 'primeng/table';
-import { Currency } from './models/currency';
 import { SharedModule } from '@src/app/shared/shared.module';
-
-interface RateInfo {
-  code: string;
-  pair: string;
-  value: number;
-  changePercentage: number | null;
-}
+import { debounceTime, combineLatest, filter, distinctUntilChanged, interval } from 'rxjs';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { CurrencyPairSelectorComponent } from './currency-pair-selector/currency-pair-selector.component';
+import { RatesListComponent } from './rates-list/rates-list.component';
 
 @Component({
   selector: 'rates',
   standalone: true,
   imports: [
     SharedModule,
-    DropdownModule,
-    MultiSelectModule,
-    TableModule,
+    CurrencyPairSelectorComponent,
+    RatesListComponent
   ],
   templateUrl: './rates.component.html',
   styleUrl: './rates.component.scss'
 })
 export class RatesComponent {
-
-  selectedBase = signal<Currency | null>(null);
-  selectedTargets = signal<Currency[]>([]);
-  previousRates = signal< { [key: string]: number } | null>(null);
-
+  private readonly destroyRef = inject(DestroyRef);
   ratesStore = inject(RatesStore);
-
-  rates = computed<RateInfo[]>(() => {
-    const currentRates = this.ratesStore.exchangeRates();
-    const prevRates = this.previousRates();
-
-    const rates = Object.entries(currentRates).map(([currency, value]) => {
-      const previousValue = prevRates?.[currency];
-      let changePercentage: number | null = null;
-
-      if (previousValue !== undefined && previousValue !== 0) {
-        changePercentage = ((value - previousValue) / previousValue) * 100;
-      }
-
-      return {
-        code: currency,
-        pair: `${this.ratesStore.baseCurrency()}/${currency}`,
-        value: value,
-        changePercentage: changePercentage
-      } as RateInfo;
-    });
-
-    // Store current rates as previous for next update
-    untracked(() =>this.previousRates.set(currentRates));
-
-    return rates;
-  });
 
   constructor() {
     this.ratesStore.loadCurrencies();
+    this.setupRatePolling();
+  }
 
-    effect(() => {
+  private setupRatePolling() {
+    // Convert signals to observables
+    const baseCurrency$ = toObservable(this.ratesStore.baseCurrency);
+    const targetCurrencies$ = toObservable(this.ratesStore.targetCurrencies);
+
+    // Combine and debounce currency changes
+    combineLatest([baseCurrency$, targetCurrencies$]).pipe(
+      debounceTime(1000),
+      filter(([base, targets]) => !!base && targets.length > 0),
+      distinctUntilChanged((prev, curr) =>
+        prev[0] === curr[0] &&
+        prev[1].length === curr[1].length &&
+        prev[1].every((v, i) => v === curr[1][i])
+      ),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => {
+      this.ratesStore.loadRates();
+    });
+
+    // Set up periodic polling
+    interval(60000).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => {
       if (this.ratesStore.hasBaseCurrency() && this.ratesStore.hasTargetCurrencies()) {
         this.ratesStore.loadRates();
       }
-    }, { allowSignalWrites: true });
-  }
-
-  updateTargetCurrencies($event: Currency[]) {
-    this.ratesStore.setTargetCurrencies($event.map(currency => currency.code));
+    });
   }
 }

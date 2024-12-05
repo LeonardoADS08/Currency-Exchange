@@ -1,0 +1,60 @@
+<div class="bg-card rounded-lg shadow p-6 mb-6">
+    <p-table #ptable
+      [value]="rates()"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      styleClass="p-datatable-sm"
+      [scrollable]="true"
+      responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-left">Currency Pair</th>
+        <th class="text-left">Rate</th>
+        <th class="text-left">Change (%)</th>
+        <th class="text-left">Change</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rate>
+      <tr>
+        <td>
+          <div class="flex items-center">
+            <div class="w-[1.25rem] flex justify-center"> 
+              <i *ngIf="rate.changePercentage > 0" class="pi pi-arrow-up text-success"></i>
+              <i *ngIf="rate.changePercentage < 0" class="pi pi-arrow-down text-danger"></i>
+              <span *ngIf="rate.changePercentage === 0" class="invisible pi pi-arrow-up"></span>
+            </div>
+            <span>{{rate.pair}}</span>
+          </div>
+        </td>
+        <td class="font-mono">{{rate.value | number:'1.8-8'}}</td>
+        <td>
+          <span class="px-2 py-1 rounded"
+                [ngClass]="{
+                  'badge-success': rate.change > 0,
+                  'badge-danger': rate.change < 0,
+                  'badge-neutral': rate.change === 0
+                }">
+            {{rate.changePercentage ? (rate.changePercentage | number:'1.2-2') + '%' : '-'}}
+          </span>
+        </td>
+        <td>
+          <span class="px-2 py-1 rounded"
+                [ngClass]="{
+                  'badge-success': rate.change > 0,
+                  'badge-danger': rate.change < 0,
+                  'badge-neutral': rate.change === 0
+                }">
+            {{rate.change ? (rate.change | number:'1.12-12') : '-'}}
+          </span>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4" class="text-center py-4"> 
+          <i class="pi pi-info-circle text-2xl mb-2"></i>
+          <div class="secondary-text">No exchange rates available</div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

@@ -1,0 +1,53 @@
+<div class="bg-card rounded-lg shadow p-6 mb-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="space-y-2">
+      <h4 class="text-lg font-semibold heading-text flex items-center gap-2">
+        <i class="pi pi-dollar text-primary"></i>
+        Base Currency
+      </h4>
+      <p-dropdown
+        [options]="ratesStore.currencies()"
+        [ngModel]="selectedBase()"
+        (ngModelChange)="ratesStore.setBaseCurrency($event.code)"
+        optionLabel="code"
+        [style]="{'width': '100%'}"
+        [virtualScroll]="true"
+        [virtualScrollItemSize]="32"
+        placeholder="Select Base Currency"
+        [filter]="true"
+        filterBy="code,name"
+        filterMatchMode="contains">
+        <ng-template let-currency pTemplate="item">
+          <div class="flex items-center gap-2">
+            <span>{{currency.name}}</span>
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+
+    <div class="space-y-2">
+      <h4 class="text-lg font-semibold heading-text flex items-center gap-2">
+        <i class="pi pi-globe text-primary"></i>
+        Target Currencies
+      </h4>
+      <p-multiSelect
+        [options]="ratesStore.currencies()"
+        [ngModel]="selectedTargets()"
+        (ngModelChange)="updateTargetCurrencies($event)"
+        optionLabel="code"
+        [style]="{'width': '100%'}"
+        placeholder="Select Target Currencies"
+        [virtualScroll]="true"
+        [virtualScrollItemSize]="32"
+        [filter]="true"
+        filterBy="code,name"
+        filterMatchMode="contains">
+        <ng-template let-currency pTemplate="item">
+          <div class="flex items-center gap-2">
+            <span>{{currency.code}} - {{currency.name}}</span>
+          </div>
+        </ng-template>
+      </p-multiSelect>
+    </div>
+  </div>
+</div>

@@ -12,7 +12,7 @@ internal class CacheExchangeRateProvider : IExchangeRateProvider
     private readonly ILogger<CacheExchangeRateProvider> _logger;
 
     // TODO: make this configurable
-    private readonly TimeSpan _cacheDuration = TimeSpan.FromMinutes(10);
+    private readonly TimeSpan _cacheDuration = TimeSpan.FromSeconds(30);
 
     public CacheExchangeRateProvider(IMemoryCache memoryCache,
         IExchangeRateProvider decoratedProvider,

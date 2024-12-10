@@ -1,7 +1,5 @@
 # CurrencyExchange
 
-[![Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://1eab-142-188-108-5.ngrok-free.app/)
-
 This solution consists of a .NET 8 backend and an Angular frontend for currency exchange rate services. The CurrencyExchange solution provides an API to get exchange rates and currency information. The Angular frontend allows users to interact with the API and view exchange rates.
 
 ## Features
@@ -50,10 +48,7 @@ npm install
 npm run start
 
 4. Open your browser and navigate to `http://localhost:4200/` to view the application.
-
-## Demo
-
-You can view a live demo of the application [here](https://1eab-142-188-108-5.ngrok-free.app/).
+the application [here](https://1eab-142-188-108-5.ngrok-free.app/).
 
 ## Contributing
 
